@@ -242,15 +242,6 @@ void selection_sort()
 	sorting = 0;
 	i = j = 0;
 }
-int exp1 = 1;
-int getMax()
-{
-	int mx = a[0];
-	for (int i = 1; i < MAX; i++)
-		if (a[i] > mx)
-			mx = a[i];
-	return mx;
-}
 //Timer function to choose sort
 void makedelay(int)
 {
