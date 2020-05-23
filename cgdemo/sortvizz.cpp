@@ -4,7 +4,7 @@
 #include <GL\glut.h>
 #include <string>
 
-#define SORT_NO 3
+#define SORT_NO 4
 #define MAX 50			// Max Array size
 #define SPEED 800		// Speed of sorting
 
@@ -16,7 +16,7 @@ int flag = 0;			// For insertion sort
 int sorting = 0;		// 1 if Sorted else 0
 int sort_count = 0;		// To cycle through the string
 
-std::string sort_string[] = { "Bubble Sort", "Selection Sort", "Insertion Sort" };
+std::string sort_string[] = { "Bubble Sort", "Selection Sort", "Insertion Sort", "Radix Sort" };
 
 // Function to display text on screen char by char
 void bitmap_output(int x, int y, std::string str, void* font)
@@ -32,12 +32,12 @@ void bitmap_output(int x, int y, std::string str, void* font)
 
 void display_text()
 {
-	glColor3f(0, 1, 0);
+	glColor3f(0, 0, 0);
 	bitmap_output(300, 695, "SORT VIZZ", GLUT_BITMAP_TIMES_ROMAN_24);
 	glEnd();
 
 
-
+	glColor3f(0.6, 0, 0);
 	if (sorting == 0)	// if not sorting display menu
 	{
 		bitmap_output(10, 595, "MENU", GLUT_BITMAP_9_BY_15);
@@ -50,7 +50,7 @@ void display_text()
 	}
 	else if (sorting == 1)	// while sorting
 	{
-		glColor3f(0.6, 0.6, 0.6);
+		glColor3f(1.0, 0.0, 0.0);
 		bitmap_output(10, 555, "Sorting in progress...", GLUT_BITMAP_9_BY_15);
 		bitmap_output(10, 535, "Press p to PAUSE", GLUT_BITMAP_9_BY_15);
 		glColor3f(0.0, 0.0, 0.0);
@@ -59,22 +59,23 @@ void display_text()
 
 void front()
 {
-	glColor3f(0.0, 1.0, 0.0);
+	glColor3f(0.0, 0.0, 0.0);
 	bitmap_output(300, 565, "WELCOME", GLUT_BITMAP_TIMES_ROMAN_24);
 	bitmap_output(330, 525, "TO", GLUT_BITMAP_TIMES_ROMAN_24);
 	glVertex2f(325, 521);
 	glVertex2f(360, 521);
 	
 	bitmap_output(200, 485, "SORT VIZZ - A SORTING VISUALIZER", GLUT_BITMAP_TIMES_ROMAN_24);
+	glColor3f(0.0, 0.0, 1.0);
 	bitmap_output(30, 125, "Created By : ", GLUT_BITMAP_HELVETICA_18);
 	bitmap_output(30, 95, "Anirudh G - 1RN17CS013", GLUT_BITMAP_HELVETICA_18);
 	bitmap_output(30, 65, "Likith Chandan - 1RN17CS047", GLUT_BITMAP_HELVETICA_18);
 	
-	glColor3f(0.0, 0.0, 0.0);
+	glColor3f(0.0, 0.0, 1.0);
 	glBegin(GL_QUADS);
-	glVertex2f(520, 120.0); glVertex2f(520, 150); glVertex2f(796, 150); glVertex2f(796, 120.0);
+	glVertex2f(520, 110.0); glVertex2f(520, 150); glVertex2f(796, 150); glVertex2f(796, 110.0);
 	glEnd();
-	glColor3f(0.0, 1.0, 0.0);
+	glColor3f(1.0, 1.0, 1.0);
 	bitmap_output(530, 125, "Press enter to continue", GLUT_BITMAP_HELVETICA_18);
 }
 
@@ -91,7 +92,7 @@ void Initialize() {
 	// Reset indexes
 	i = j = 0;
 
-	glClearColor(0, 0, 0, 0);
+	glClearColor(0, 1, 1, 0.5);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluOrtho2D(0, 699, 0, 799);
@@ -123,7 +124,7 @@ void display()
 
 		for (ix = 0; ix < MAX; ix++)
 		{
-			glColor3f(1, 0, 0);
+			glColor3f(0, 0, 1);
 			glBegin(GL_LINE_LOOP);
 			glVertex2f(10 + (700 / (MAX + 1)) * ix, 50);
 			glVertex2f(10 + (700 / (MAX + 1)) * (ix + 1), 50);
@@ -132,13 +133,13 @@ void display()
 			glEnd();
 
 			text = std::to_string(a[ix]);
-			glColor3f(1, 1, 1);
+			glColor3f(0, 0, 0.8);
 			bitmap_output(12 + (700 / (MAX + 1)) * ix, 35, text, GLUT_BITMAP_TIMES_ROMAN_10);
 		}
 
 		if (swapflag || sorting == 0)
 		{
-			glColor3f(0, 1, 1);
+			glColor3f(1, 0, 0);
 			glBegin(GL_POLYGON);
 			glVertex2f(10 + (700 / (MAX + 1)) * j, 50);
 			glVertex2f(10 + (700 / (MAX + 1)) * (j + 1), 50);
@@ -197,7 +198,7 @@ void insertion_sort()
 			{
 				flag = 0;
 			}
-			std::cout << "swap " << a[j] << " and " << a[j + 1] << std::endl;
+			std::cout << "swap "<< a[j] << " and " << a[j + 1] << std::endl;
 		}
 		i++;
 	}
@@ -242,6 +243,42 @@ void selection_sort()
 	sorting = 0;
 	i = j = 0;
 }
+int exponent = 1, pass = 0;
+
+void radix_sort()
+{
+	if (notsorted()) 
+	{
+		pass++;
+		int output[MAX];
+		int i, count[10] = { 0 };
+		for (i = 0; i < MAX; i++)
+			count[(a[i] / exponent) % 10]++;
+
+		for (i = 1; i < 10; i++)
+			count[i] += count[i - 1];
+
+		for (i = MAX - 1; i >= 0; i--)
+		{
+			output[count[(a[i] / exponent) % 10] - 1] = a[i];
+			count[(a[i] / exponent) % 10]--;
+		}
+		for (i = 0; i < MAX; i++)
+			a[i] = output[i];
+		std::cout << "\nAfter pass " << pass << "\n";
+		for (int i = 0; i < MAX; i++)
+			std::cout << a[i] << " ";
+		glutPostRedisplay();
+		exponent *= 10;
+		sorting = 0;
+	}
+	else {
+		sorting = 0;
+		pass = 0;
+		exponent = 1;
+	}
+}
+
 //Timer function to choose sort
 void makedelay(int)
 {
@@ -252,6 +289,7 @@ void makedelay(int)
 			case 0:	bubble_sort();		break;
 			case 1:	selection_sort();	break;
 			case 2: insertion_sort();	break;
+			case 3: radix_sort();		break;
 		}
 	}
 	glutPostRedisplay();
@@ -268,8 +306,8 @@ void keyboard(unsigned char key, int x, int y)
 		{
 			case 27:	exit(0); //ESC
 			case 's':	sorting = 1; break;
-			case 'r':	Initialize(); break;
-			case 'c':	sort_count = (sort_count + 1) % SORT_NO;	break; //cycle between 0 to 2
+			case 'r':	system("cls"); exponent = 1, pass = 0; Initialize(); break;
+			case 'c':	sort_count = (sort_count + 1) % SORT_NO;	break;	//cycle between 0 to 3
 		}
 	}
 	if (k == 1 && sorting == 1)
