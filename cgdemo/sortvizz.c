@@ -122,6 +122,7 @@ void display()
 		{
 			glColor3f(0, 0, 1);
 			glBegin(GL_LINE_LOOP);
+			glLineWidth(1.5);
 			glVertex2f(10 + (700 / (MAX + 1)) * ix, 50);
 			glVertex2f(10 + (700 / (MAX + 1)) * (ix + 1), 50);
 			glVertex2f(10 + (700 / (MAX + 1)) * (ix + 1), 50 + a[ix] * 4);
@@ -262,9 +263,11 @@ void radix_sort()
 		}
 		for (i = 0; i < MAX; i++)
 			a[i] = output[i];
+
 		printf("\nAfter pass %d: \n", pass);
 		for (int i = 0; i < MAX; i++)
 			printf("%d ", a[i]);
+
 		glutPostRedisplay();
 		exponent *= 10;
 		sorting = 0;
@@ -303,8 +306,8 @@ void keyboard(unsigned char key, int x, int y)
 		{
 		case 27:	exit(0); //ESC
 		case 's':	sorting = 1; break;
-		case 'r':	system("cls"); exponent = 1, pass = 0; Initialize(); break;
-		case 'c':	sort_count = (sort_count + 1) % SORT_NO;	break;	//cycle between 0 to 3
+		case 'r':	system("cls"); exponent = 1, pass = 0; Initialize();	break;
+		case 'c':	sort_count = (sort_count + 1) % SORT_NO;				break;	//cycle between 0 to 3
 		}
 	}
 	if (k == 1 && sorting == 1)
