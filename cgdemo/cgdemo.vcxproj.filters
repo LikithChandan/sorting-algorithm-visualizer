@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="sortvizz.cpp">
+    <ClCompile Include="sortvizz.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
