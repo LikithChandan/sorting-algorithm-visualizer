@@ -1,2 +1,2 @@
 # sort-vizz
-A sorting algorithm visualizer implemented in OpenGL using freeglut library.
+A sorting algorithm visualizer implemented in OpenGL using glut library.
